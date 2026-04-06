@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mindspark Referral</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(to bottom, #0d6efd, #6610f2);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-box {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .coins {
+      font-size: 60px;
+      font-weight: bold;
+      color: gold;
+    }
+
+    .btn-custom {
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-weight: 600;
+    }
+
+    .ref-link {
+      background: white;
+      color: black;
+      border-radius: 10px;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="col-md-6">
+
+    <div class="card-box">
+
+      <!-- Title -->
+      <h2 class="fw-bold mb-3">🎉 Refer & Earn</h2>
+      <p class="mb-4">Invite your friends and earn rewards!</p>
+
+      <!-- Coins -->
+      <div class="coins mb-3">
+        💰 1000 Coins
+      </div>
+      <p>Get 1000 coins when your friend joins!</p>
+
+      <!-- Referral Link -->
+      <div class="ref-link d-flex justify-content-between align-items-center mt-4">
+        <span id="refText" th:text="'www.mindsparkquiz.com/'+${referelCode}"></span>
+        <button class="btn btn-primary btn-sm" onclick="copyLink()">
+          <i class="bi bi-clipboard"></i>
+        </button>
+      </div>
+
+      <!-- Buttons -->
+      <div class="mt-4 d-flex justify-content-between">
+
+        <button class="btn btn-success btn-custom w-50 me-2">
+          <i class="bi bi-share"></i> Share
+        </button>
+
+        <button class="btn btn-warning btn-custom w-50 ms-2">
+          <i class="bi bi-person-plus"></i> Invite
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- JS -->
+<script>
+function copyLink() {
+  const text = document.getElementById("refText").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Referral link copied!");
+}
+</script>
+
+</body>
+</html>

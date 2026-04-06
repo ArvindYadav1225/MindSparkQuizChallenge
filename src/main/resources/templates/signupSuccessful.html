@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="4 url=/userhomepage">
+<title>Signup Success</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #43cea2, #185a9d);
+}
+
+/* Card */
+.card {
+    width: 90%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    color: white;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    animation: fadeIn 0.6s ease;
+}
+
+/* Icon Circle */
+.icon {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: pop 0.5s ease;
+}
+
+.icon img {
+    width: 60px;
+}
+
+/* Text */
+h1 {
+    margin-top: 20px;
+    font-size: 28px;
+}
+
+p {
+    margin-top: 10px;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Loader dots */
+.loader {
+    margin-top: 20px;
+}
+
+.loader span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: white;
+    margin: 3px;
+    border-radius: 50%;
+    animation: bounce 1s infinite alternate;
+}
+
+.loader span:nth-child(2) { animation-delay: 0.2s; }
+.loader span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Animations */
+@keyframes pop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+/* Mobile */
+@media(max-width: 500px){
+    h1 { font-size: 22px; }
+    p { font-size: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <!-- Icon -->
+    <div class="icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png">
+    </div>
+
+    <!-- Text -->
+    <h1>Account Created 🎉</h1>
+    <p>Your signup was successful</p>
+    <p>Welcome to MindSpark 🚀</p>
+
+    <!-- Loading dots -->
+    <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MindSpark UI</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Poppins',sans-serif;
+background:url("images/mindsparksignupbackground.png") no-repeat center center fixed;
+background-size:cover;
+}
+
+/* HEADER */
+
+.top-bar{
+position:absolute;
+top:15px;
+left:20px;
+right:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.settings{
+
+color:black;
+padding:10px;
+border-radius:10px;
+font-size:22px;
+}
+
+.user-box{
+background:rgba(255,255,255,0.9);
+padding:8px 15px;
+border-radius:20px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.user-box img{
+width:35px;
+height:35px;
+border-radius:50%;
+}
+
+.user-name{
+font-weight:600;
+font-size:14px;
+}
+
+.score{
+font-size:12px;
+color:#555;
+}
+
+/* LOGO */
+
+.logo{
+text-align:center;
+margin-top:120px;
+color:yellow;
+font-size:30px;
+font-weight:bold;
+}
+
+/* BUTTONS */
+
+.main-btn{
+margin-top:150px;
+width:85%;
+margin:20px auto;
+padding:15px;
+font-family:cooper black;
+border-radius:30px;
+text-align:center;
+font-size:18px;
+font-weight:600;
+color:white;
+background:rgb(55, 27, 242);
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+cursor:pointer;
+transition:0.3s;
+}
+
+.main-btn:hover{
+transform:scale(1.05);
+}
+
+/* REWARD CARDS */
+
+.reward-section{
+margin-top:70% auto;
+position:absolute;
+
+width:100%;
+display:flex;
+justify-content:space-evenly;
+padding:0 10px;
+}
+
+.reward-card{
+background:rgba(255,255,255,0.9);
+padding:12px;
+border-radius:15px;
+text-align:center;
+width:30%;
+box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+.reward-card img{
+width:40px;
+margin-bottom:5px;
+}
+
+.reward-text{
+font-size:14px;
+}
+
+.reward-text b{
+color:#ff9900;
+font-size:16px;
+}
+/* SIDEBAR (SLIDER) */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -50%;
+    width: 50%;
+    height: 100vh;
+    background: rgba(44, 62, 80, 0.95);
+    color: white;
+    padding: 10px;
+    transition: 0.4s;
+    z-index: 2000;
+    backdrop-filter: blur(10px);
+}
+
+/* Show sidebar */
+.sidebar.active {
+    left: 0;
+}
+
+/* Close button */
+.close-btn {
+    font-size: 15px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 15px;
+}
+
+/* Sidebar buttons */
+.sidebar-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    background: #34495e;
+    color: white;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar-btn:hover {
+    background: #1abc9c;
+}
+
+/* Bottom Container */
+.bottom-menu{
+position:fixed;
+bottom:1%;
+left:50%;
+transform:translateX(-50%);
+width:97%;
+background:rgba(255,255,255,0.95);
+border-radius:20px;
+display:flex;
+justify-content:space-around;
+align-items:center;
+padding:0px 5px;
+box-shadow:0 5px 20px rgba(0,0,0,0.25);
+backdrop-filter: blur(10px);
+z-index:1000;
+}
+
+/* Buttons */
+.menu-btn{
+flex:1;
+text-align:center;
+color:#0d6efd;
+font-size:12px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.menu-btn i{
+display:block;
+font-size:22px;
+margin-bottom:3px;
+}
+
+/* Hover Effect */
+.menu-btn:hover{
+color:#ff7a00;
+transform:scale(1.1);
+}
+
+/* Click Effect */
+.menu-btn:active{
+transform:scale(0.95);
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Top Bar -->
+<!-- SIDEBAR -->
+<div id="sidebar" class="sidebar">
+    <span class="close-btn" onclick="toggleSidebar()">❌</span>
+
+    <button class="sidebar-btn" style="margin-top:30Px">🏠 Home</button>
+    <button class="sidebar-btn">ℹ️ English</button>
+    
+    <button class="sidebar-btn">ℹ️ About</button>
+    <button class="sidebar-btn">🚪 Logout</button>
+    <button class="sidebar-btn">🚪 Logout</button>
+    <button class="sidebar-btn">🚪 Logout</button>
+    <button class="sidebar-btn">🚪 Logout</button>
+</div>
+<div class="top-bar">
+
+<div class="settings" onclick="toggleSidebar()">
+<i class="bi bi-gear"></i>
+</div>
+
+<div class="user-box">
+<div>
+<div class="user-name" th:text="${user.userName}"></div>
+<div class="score">Score: 1250</div>
+</div>
+<a th:href="@{/profile}">  <img th:src="${user.image}"> </a>
+</div>
+
+</div>
+
+<!-- Logo -->
+
+<div class="logo" style="font-family:snap itc">
+ .
+</div>
+
+<!-- Buttons -->
+
+<a th:href="@{/previousChallenge}"><div class="main-btn">
+Continue Previous Challenge
+</div></a>
+
+<div class="main-btn">
+<a th:href="@{/selectSubject}" style="text-decoration:none;color:white">Start New Challenge</a>
+</div>
+
+<a th:href="@{/leaderboard}"><div class="main-btn">
+Check your Rank
+</div></a>
+<div class="main-btn">
+Daily challenges
+</div>
+
+<!-- Rewards -->
+
+<div class="reward-section">
+
+
+<div class="reward-card">
+💰
+<div class="reward-text">
+Challenge1 <br><b>100 Coins</b>
+</div>
+</div>
+
+<div class="reward-card">
+💰
+<div class="reward-text">
+Challenge2 <br><b>150 Coins</b>
+</div>
+</div>
+
+<div class="reward-card">
+💰
+<div class="reward-text">
+Challenge3 <br><b>200 Coins</b>
+</div>
+</div>
+
+</div>
+<div class="bottom-menu">
+
+<a th:href="@{/referer}"><div class="menu-btn">
+<i class="bi bi-person-plus-fill"></i>
+Refer Friends
+</div></a>
+
+<div class="menu-btn"><a th:href="@{/myFriends}">
+<i class="bi bi-people-fill"></i>
+My Friends</a>
+</div>
+
+<a th:href="@{/findFriend}"><div class="menu-btn">
+<i class="bi bi-search"></i>
+Find Friends
+</div></a>
+
+<div class="menu-btn"><a th:href="@{/logout}">
+<i class="bi bi-box-arrow-right"></i>
+Logout </a>
+</div>
+<script>
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+}
+</script>
+</div>
+</body>
+</html>

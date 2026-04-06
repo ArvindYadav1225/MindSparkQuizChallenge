@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quiz Setup</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+
+body{
+background:#f4f6fb;
+font-family:Arial;
+}
+
+/* Top Bar */
+
+.topbar{
+background:white;
+padding:12px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.username{
+font-weight:bold;
+font-size:18px;
+}
+
+.profile i{
+font-size:26px;
+}
+
+/* Option Cards */
+
+.option-card{
+
+background:white;
+border-radius:10px;
+padding:10px;
+text-align:center;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+font-size:10px;
+font-weight:bold;
+}
+
+.option-card:hover{
+transform:translateY(-6px);
+background:#e9f2ff;
+}
+
+/* Difficulty colors */
+
+.easy{
+background:#d4edda;
+color:#155724;
+}
+
+.medium{
+background:#fff3cd;
+color:#856404;
+}
+
+.hard{
+background:#f8d7da;
+color:#721c24;
+}
+
+.option-card i{
+font-size:32px;
+margin-bottom:2px;
+display:block;
+}
+
+/* Start Button */
+
+.start-btn{
+margin-top:40px;
+font-size:18px;
+padding:12px;
+width:220px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Topbar -->
+
+<div class="topbar">
+
+<div class="username">
+<i class="bi bi-person-circle"></i> Arvind Yadav
+</div>
+
+<div class="profile">
+<i class="bi bi-person-circle"></i>
+</div>
+
+</div>
+
+<div class="container mt-5">
+
+<h5 class="text-center mb-4" >Select Number of Questions</h5>
+
+<div class="row text-center g-4">
+
+<div class="col-4">
+<div class="option-card" onclick="selectQuestionnum(10)" style="font-size:20px">
+10
+</div>
+</div>
+
+<div class="col-4">
+<div class="option-card"  onclick="selectQuestionnum(20)" style="font-size:20px">
+20
+</div>
+</div>
+
+<div class="col-4">
+<div class="option-card"  onclick="selectQuestionnum(30)" style="font-size:20px">
+30
+</div>
+</div>
+
+</div>
+
+<h3 class="text-center mt-3 mb-3">Select Difficulty</h3>
+
+<div class="row text-center g-4">
+
+<div class="col-3">
+<div class="option-card easy" onclick="selectQuestionlevel('Easy')">
+<i class="bi bi-emoji-smile"></i>
+Easy
+</div>
+</div>
+
+<div class="col-3">
+<div class="option-card medium" onclick="selectQuestionlevel('Medium')">
+<i class="bi bi-emoji-neutral"></i>
+Medium
+</div>
+</div>
+
+<div class="col-3">
+<div class="option-card hard" onclick="selectQuestionlevel('Hard')">
+<i class="bi bi-emoji-frown"></i>
+Hard
+</div>
+</div>
+<div class="col-3">
+<div class="option-card hard" onclick="selectQuestionlevel('More Hard')">
+<i class="bi bi-emoji-frown"></i>
+More Hard
+</div>
+</div>
+
+</div>
+
+<div class="text-center">
+
+
+<button class="btn btn-primary start-btn" onclick="callApi()">
+<i class="bi bi-play-circle"></i> Start Quiz
+</button>
+
+
+</div>
+
+</div>
+<script type="text/javascript">
+   let questionNum=0;
+   let questionlevel=null;
+   function selectQuestionnum( num){
+	   
+	      questionNum=num;
+	     
+   }
+   function selectQuestionlevel( level){
+	   questionlevel=level;
+	   
+}
+   function callApi(event){
+	  
+	if(!questionNum ||!questionNum ){
+		alert("please select no of question and question level.");
+		return;
+		
+	}
+	   let url = `/questionPage/${questionNum}/${questionlevel}`;
+	    
+	    // Redirect to controller (this will load the view)
+	    window.location.href = url;
+   }
+</script>
+</body>
+</html>

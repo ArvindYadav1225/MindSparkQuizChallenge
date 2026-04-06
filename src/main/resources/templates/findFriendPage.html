@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Find Friends</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+
+/* 🌈 Background */
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg, #667eea, #764ba2, #36d1dc, #5b86e5);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+    overflow-x: hidden; /* ❌ remove horizontal scroll */
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* 🔍 Search Box */
+.search-box {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 500px;
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    padding: 15px;
+    border-radius: 20px;
+    color: white;
+    z-index: 1000;
+}
+
+/* Input */
+.input-group {
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.form-control {
+    border: none;
+    padding-left: 20px;
+}
+
+/* Button */
+.search-btn {
+    background: linear-gradient(45deg, #36d1dc, #5b86e5);
+    color: white;
+    border: none;
+}
+
+/* 👤 Top Right Profile */
+.user-card {
+    position: fixed;
+    top: 20px;
+    right: 15px;
+    width: 180px;
+
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+}
+
+.user-card img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+}
+
+/* 👥 Results */
+.results-container {
+    margin-top: 130px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* User Cards */
+.profile-card {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px;
+    background: white;
+    color: black;
+    padding: 15px;
+}
+
+/* Hover effect */
+.profile-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Image */
+.profile-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Button fix */
+.add-btn {
+    white-space: nowrap;
+}
+
+</style>
+
+</head>
+<body>
+
+<!-- 👤 Static Profile -->
+
+
+<!-- 🔍 Search -->
+<div class="search-box">
+
+    <h5 class="text-center mb-2">
+        <i class="bi bi-people-fill"></i> Find Friends
+    </h5>
+
+    <form th:action="@{/searchFriends}" method="post">
+        <div class="input-group">
+            <input type="text" name="userName" class="form-control" placeholder="Search friends...">
+            <button class="btn search-btn">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+    </form>
+
+</div>
+
+<!-- 👥 Results -->
+<div class="results-container">
+
+    <div th:if="${users != null}">
+        
+        <div th:each="user : ${users}">
+            
+            <div class="card profile-card mb-3 shadow-sm">
+                <div class="d-flex align-items-center">
+
+                    <!-- Image -->
+                    <img th:src="${user.image}" class="profile-img me-3">
+
+                    <!-- Info -->
+                    <div class="flex-grow-1">
+                        <h6 class="mb-0" th:text="${user.name}"></h6>
+                        <small class="text-muted">Friend suggestion</small>
+                    </div>
+
+                    <!-- Button -->
+                    <div>
+                      <form th:action="@{/addFriend/{name}(name=${user.userName})}" method="get">
+    <button class="btn btn-primary btn-sm rounded-pill add-btn">
+        <i class="bi bi-person-plus"></i> Add
+    </button>
+</form>
+                       </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+//Push current page into history
+history.pushState(null, null, location.href);
+
+// Listen for back button
+window.onpopstate = function () {
+    // Redirect wherever you want
+    window.location.href = "/userhomepage"
+};
+</script>
+</body>
+</html>

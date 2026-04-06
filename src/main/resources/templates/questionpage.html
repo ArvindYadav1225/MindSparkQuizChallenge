@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MindSpark Quiz</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f4f6fb;
+
+}
+.next-btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    
+    /* Gradient background */
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    
+    color: white;
+    font-weight: 500;
+
+    /* Remove corners (fully rounded) */
+    border-radius: 50px;
+
+    /* Smooth effects */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Hover effect */
+.next-btn:hover {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    color: white;
+}
+
+/* Click effect */
+.next-btn:active {
+    transform: scale(0.95);
+}
+
+/* Disabled state (before enabling API) */
+.next-btn.disabled {
+    opacity: 0.5;
+    pointer-events: auto;
+}
+
+/* Header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:white;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.logo{
+font-weight:600;
+font-size:20px;
+color:#0d6efd;
+}
+
+.left-header{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.username{
+font-weight:600;
+}
+
+.score{
+font-size:13px;
+color:#666;
+}
+
+.profile i{
+font-size:32px;
+}
+
+/* Timer */
+
+.timer{
+text-align:center;
+margin-top:20px;
+font-size:20px;
+font-weight:600;
+color:#dc3545;
+}
+
+/* Question */
+
+.question-box{
+background:white;
+margin:20px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+font-size:18px;
+}
+
+/* Options */
+
+.option{
+background:white;
+padding:15px;
+border-radius:10px;
+margin:10px 20px;
+display:flex;
+align-items:center;
+gap:10px;
+cursor:pointer;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.option:hover{
+background:#eef3ff;
+}
+
+.option input{
+margin-right:10px;
+}
+
+.option span{
+font-weight:500;
+}
+
+/* Tick icon */
+
+.correct{
+margin-left:auto;
+color:green;
+display:none;
+}
+
+/* Next button */
+
+.next-btn{
+display:block;
+margin:25px auto;
+width:200px;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Header -->
+
+<div class="header">
+
+<div class="left-header">
+
+<i class="bi bi-gear"></i>
+
+<div>
+<div class="username">Arvind Yadav</div>
+<div class="score">Score : 1250</div>
+</div>
+
+</div>
+
+
+
+<div class="profile">
+<i class="bi bi-person-circle"></i>
+</div>
+
+</div>
+
+<!-- Timer -->
+
+<div class="timer">
+<i class="bi bi-stopwatch"></i> <span id="time">0</span> / 20 sec
+</div>
+
+<!-- Question -->
+
+<div class="question-box">
+
+<span th:text="${quizes[quizNo].question}"></span>
+
+</div>
+
+<!-- Options -->
+
+<div 
+  
+  th:ans="${quizes[quizNo].answer}"
+   th:id="${quizes[quizNo].id}"
+   
+  onclick="checkResult(this,'A')">
+<label class="option" id="optionA">
+
+
+A.<span th:text="${quizes[quizNo].A}" ></span>
+
+
+
+</label>
+</div>
+<div 
+ 
+  th:ans="${quizes[quizNo].answer}"
+   th:id="${quizes[quizNo].id}"
+ 
+  onclick="checkResult(this,'B')">
+<label class="option" id="optionB">
+
+
+B.<span th:text="${quizes[quizNo].B}"></span>
+
+
+
+</label>
+</div>
+<div 
+  
+  th:ans="${quizes[quizNo].answer}"
+  th:id="${quizes[quizNo].id}"
+ 
+  onclick="checkResult(this,'C')">
+<label class="option" id="optionC">
+
+
+
+C.<span th:text="${quizes[quizNo].C}"></span>
+
+
+
+</label>
+</div>
+<div 
+
+  th:ans="${quizes[quizNo].answer}"
+   th:id="${quizes[quizNo].id}"
+   
+  onclick="checkResult(this,'D')">
+
+<label class="option" id="optionD">
+
+
+
+D.<span th:text="${quizes[quizNo].D}"></span>
+
+
+
+</label>
+</div>
+<span  style="color:green;display:none" id="true">&nbsp &nbsp &nbsp <i class="bi bi-check-circle-fill"></i>
+ Correct Anser.</span>
+<span  style="color:red;display:none" id="false">&nbsp &nbsp &nbsp <i class="bi bi-cross-circle-fill"></i>
+ Wrong Anser.</span><br><br>
+ <span style="display:none;color:red" id="selectWarning"> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp !Please select any Option.</span>
+<span id="answer" style="color:green;display:none;margin-left:9%"  th:text="'Ans '  + ' ' + ${quizes[quizNo].answer}">></span>
+
+
+
+
+
+<a style="margin-left:17%" id="nextLink"
+   class="next-btn d-inline-flex align-items-center gap-2"
+   th:data-url="@{/nextQuestion/{quizNo}(quizNo=${quizNo})}"
+   href="#"
+   onclick="handleNextClick(event)">
+    
+    <i class="bi bi-arrow-right-circle-fill"></i>
+    <span>Next Question</span>
+</a>
+
+
+
+<script>
+
+/* Timer */
+
+let time=0;
+
+let timer=setInterval(()=>{
+
+time++;
+
+document.getElementById("time").innerText=time;
+
+if(time>=20){
+clearInterval(timer);
+}
+
+},1000);
+
+
+/* Show tick when option selected */
+
+let options=document.querySelectorAll(".option");
+
+options.forEach(option=>{
+
+option.addEventListener("click",()=>{
+
+document.querySelectorAll(".correct").forEach(c=>c.style.display="none");
+
+option.querySelector(".correct").style.display="inline";
+
+});
+
+});
+let isEnabled = false;
+
+function handleNextClick(event) {
+    if (!isEnabled) {
+        event.preventDefault();   // ❌ stop API
+        document.getElementById("selectWarning").style.display="inline";  // ✔ behave like button
+    }
+    // if enabled → normal link works
+}
+   let flag=true;
+   async function checkResult(ob,option){
+	   if(flag===false) return;
+	   
+	   let ans=ob.getAttribute("ans");
+	   let id=ob.getAttribute("id");
+	   let ansOption=null;
+	   let res=null;
+	   let link = document.getElementById("nextLink");
+	   document.getElementById("selectWarning").style.display="none"; 
+	    let url = link.getAttribute("data-url"); // get Thymeleaf URL
+	    link.href = url;                         // apply API
+
+	    link.onclick = null;
+	    
+
+        
+	   if(document.getElementById("optionA").querySelector("span").textContent===ans)ansOption="A";
+	   if(document.getElementById("optionB").querySelector("span").textContent===ans)ansOption="B";
+	   if(document.getElementById("optionC").querySelector("span").textContent===ans)ansOption="C";
+	   if(document.getElementById("optionD").querySelector("span").textContent===ans)ansOption="D";
+	        if(ansOption===option)res=true;
+	        
+	        else res=false;
+	        console.log(ansOption);
+	        console.log(option);
+	        console.log(res);console.log(id);
+	        const response = await fetch(`http://localhost:8080/checkresult2/${id}/${ansOption}/${option}/${res}`);
+
+	        if (!response.ok) {
+	            throw new Error("Network response was not ok");
+	        }
+	        if (res === true) {
+	        	 document.getElementById('option'+option).style.backgroundColor = "rgba(0, 128, 0, 0.6)";
+	        	 document.getElementById('true').style.display="inline";
+	        	 document.getElementById('answer').style.display="inline";
+	        	 document.getElementById('false').style.display="none";
+	        	 
+	        	 flag=false;
+	        } else {
+	            document.getElementById('option'+option).style.backgroundColor = "rgba(255, 0, 0, 0.9)";
+	            document.getElementById('false').style.display="inline";
+	            document.getElementById('true').style.display="none";
+	       	 document.getElementById('answer').style.display="inline";
+
+	            flag=false;
+	        }     
+	   
+	        
+   }
+/*async function checkResult(a,option) {
+	if(flag){
+    try {
+    	 
+        let uans = a.getAttribute("uans");
+        let ans = a.getAttribute("ans");
+        let id=a.getAttribute("id");
+        let qNo=a.getAttribute("qNo");
+        let uo=a.getAttribute("uo");
+        let ao=a.getAttribute("ao");
+        const response = await fetch(`http://localhost:8080/checkResult/${uans}/${ans}/{id}/{qNo}/{uo}/{ao}`);
+
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+
+        const result = await response.json(); // backend should return true/false
+
+        if (result === true) {
+        	 document.getElementById(option).style.backgroundColor = "rgba(0, 128, 0, 0.6)";
+        	 document.getElementById('true').style.display="inline";
+        	 document.getElementById('answer').style.display="inline";
+        	 document.getElementById('false').style.display="none";
+        	 
+        	 flag=false;
+        } else {
+            document.getElementById(option).style.backgroundColor = "rgba(255, 0, 0, 0.9)";
+            document.getElementById('false').style.display="inline";
+            document.getElementById('true').style.display="none";
+       	 document.getElementById('answer').style.display="inline";
+
+            flag=false;
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+	}
+	
+	return;
+}
+*/
+
+</script>
+
+</body>
+</html>

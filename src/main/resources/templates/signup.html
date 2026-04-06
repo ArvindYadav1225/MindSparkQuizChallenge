@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindSpark Signup</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+
+body{
+height:100vh;
+margin:0;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background-image:url("images/mindsparksignupbackground.png");
+background-size:cover;
+background-position:center;
+font-family:Arial;
+}
+
+/* TEXT BELOW LOGO */
+.tagline{
+color:#3b6cb7;
+font-size:18px;
+font-weight:600;
+margin-bottom:20px;
+text-align:center;
+}
+
+/* SMALL MOBILE FORM */
+.signup-box{
+width:290px;
+
+
+
+padding:20px;
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+}
+
+.form-control{
+border-radius:25px;
+height:38px;
+padding-left:38px;
+font-size:14px;
+}
+
+.input-icon{
+position:relative;
+margin-bottom:12px;
+}
+
+.input-icon i{
+position:absolute;
+left:12px;
+top:9px;
+font-size:15px;
+color:#6c757d;
+}
+
+.form-check{
+font-size:13px;
+}
+
+.signup-btn{
+width:100%;
+border:none;
+border-radius:30px;
+padding:9px;
+font-size:16px;
+font-weight:bold;
+color:white;
+margin-top:10px;
+background:linear-gradient(90deg,#3b82f6,#9333ea,#f59e0b);
+}
+
+.login-text{
+text-align:center;
+margin-top:12px;
+font-size:13px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TEXT LINE -->
+<br><br>
+
+<div class="signup-box">
+
+ <form th:action="@{/submitSignup}" method="post" th:object="${user}">
+<div class="input-icon">
+<i class="bi bi-person"></i>
+<input type="text" class="form-control" th:field="*{name}" placeholder="Username" >
+ <span style="color:red;font-family: Inter;font-size: 13px;font-weight: 500;" th:errors="*{name}"></span>
+                   
+</div>
+<div class="input-icon">
+<i class="bi bi-envelope"></i>
+<input type="email" class="form-control" th:field="*{gmail}" placeholder="Email" >
+ <span style="color:red;font-family: Inter;font-size: 13px;font-weight: 500;" th:errors="*{gmail}"></span>
+                   
+</div>
+
+
+<div class="input-icon">
+<i class="bi bi-lock"></i>
+<input type="password" class="form-control" th:field="*{password}" placeholder="Password" >
+ <span style="color:red;font-family: Inter;font-size: 13px;font-weight: 500;" th:errors="*{password}"></span>
+                   
+</div>
+<div class="input-icon">
+<i class="bi bi-lock"></i>
+<input type="password" class="form-control" placeholder="confirm Password" name="cpassword">
+</div>
+<div class="input-icon">
+<input type="text" class="form-control" placeholder="referelCode" style="width:70%;margin-left:15%" onBlur="checkReferelCode(event)" name="reCode">
+<small  id="referelCodeIsApply" style="font-size:10px;margin-left:25%;display:none"></small>
+</div>
+<div class="form-check">
+<input class="form-check-input" type="checkbox">
+<label class="form-check-label">
+I agree to the Terms
+</label>
+</div>
+
+<button class="signup-btn">Sign Up</button>
+
+<div class="login-text">
+Already have an account? <a th:href="@{/login}">Log In</a>
+</div>
+</form>
+
+</div>
+<script>
+  async function checkReferelCode(event){
+	 let referelCode=event.target.value;
+	 const response = await fetch(`http://localhost:8080/checkValidReferelCode/${referelCode}`);
+	 const result = await response.json(); // 👈 extract actual data
+
+	    console.log(result); // true or false
+	    let referelCodeIsApply=document.getElementById("referelCodeIsApply");
+	    if(result===true){
+	    	referelCodeIsApply.style.color="green";
+	    	referelCodeIsApply.innerText="Referel Code is Applied."
+	    		referelCodeIsApply.style.display="inline";
+	    	document.getElementsByName("reCode")[0].style.border = "2px solid green";
+	    }
+	    else{
+	    	referelCodeIsApply.style.color="red";
+	    	referelCodeIsApply.innerText="Invalid Referel Code."
+	    		referelCodeIsApply.style.display="inline";
+	    	document.getElementsByName("reCode")[0].style.border = "2px solid red";
+	    }
+	 
+	 
+ }
+</script>
+</body>
+</html>
