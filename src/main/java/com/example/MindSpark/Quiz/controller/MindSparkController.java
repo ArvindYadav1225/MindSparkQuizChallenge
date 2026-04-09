@@ -134,6 +134,7 @@ public String selectSubject( HttpSession session ,Model model) {
 @GetMapping("/profile")
 public String profile(HttpSession session,Model m) {
 	String gmail=(String)session.getAttribute("gmail");
+	
 	if(gmail==null) {
 		return"signup";
 		
@@ -479,44 +480,44 @@ public boolean checkValidReferelCode(@PathVariable("referelCode") String referel
 	return false;
 }
 String OTP;
-String userGmail;
+
 @GetMapping("/generateOtp")
 @ResponseBody
 public void generateOtp() {
 	Random random2=new Random();
 	OTP=String.valueOf(random2.nextInt(1000000));
+	System.out.println(OTP);
 	
 }
-@GetMapping("/sendOtpPage")
-public String sendOtpPage() {
-	
-	return "";
-}
-@PostMapping("/sendOtp")
-public String sendOtp(@RequestParam("gmail") String gmail,Model m) {
+
+@GetMapping("/sendOtp/{gmail}")
+@ResponseBody
+public boolean sendOtp(@PathVariable("gmail") String gmail,Model m,HttpSession session) {
 	List<User> users=ur.findAll();
 	boolean f=false;
 	 for(User u:users) {
 		 if(u.getGmail().equals(gmail)) {
 			 f=true;
-			 userGmail=gmail;
+			session.setAttribute("userGmail",gmail);
 			 break;
 		 }
 		 }
 	 if(f==true) {
 		 generateOtp();
+		
 		 
 		 
 	 }
-	 m.addAttribute("invalidGmail","yes");
+	// m.addAttribute("invalidGmail","yes");
 	 
-	return "";
+	return f;
 	
 }
 
-@GetMapping("/otpVerification")
+@GetMapping("/otpVerification/{otp}")
 @ResponseBody
-public boolean otpVerification(@RequestParam("otp") String otp) {
+public boolean otpVerification(@PathVariable("otp") String otp) {
+	System.out.println(OTP+"    "+otp);
 	if(OTP.equals(otp)) {
 		return true;
 	}
@@ -526,25 +527,44 @@ public boolean otpVerification(@RequestParam("otp") String otp) {
 }
 @GetMapping("/loginByGmail")
 public String loginByGmail(HttpSession session) {
-	session.setAttribute("gmail",userGmail);
+	//session.setAttribute("gmail",session.get);
 	
-	return "loginSuccessful";
+	return "signupSuccessful";
 }
-@GetMapping("/updatePasswordPage")
+@GetMapping("/updatePassword")
 public String updatePasswordPage() {
 	
-	return "";
+	return "changepasswordpage";
 }
  @PostMapping("/updatePassword")
  public String updatePassword(@RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword,@RequestParam("cNewPassword") String cNewPassword,HttpSession session,Model m) {
 	 User u=ur.getByGmail((String)session.getAttribute("gmail")); 
+	 System.out.println(oldPassword+"old");
+	 System.out.println(newPassword+"new");
+	 System.out.println(cNewPassword+"cnew");
 	 if(u.getPassword().equals(oldPassword)) {
-		 u.setPassword(newPassword);
-		 ur.save(u);
-		 return "";
-		 
+		if(newPassword.equals(cNewPassword)) {
+			 u.setPassword(newPassword);
+			 ur.save(u);
+			
+				m.addAttribute("user", u);
+			 return "profile";
+		}
+		else
+		{
+			 m.addAttribute("newpasscpass","yes");
+		}
 	 }
 	 m.addAttribute("invalidOldPassword","yes");
-	 return "";
+	 return "changepasswordpage";
+ }
+ @GetMapping("/sendOtpPage")
+ public String sendOtppage() {
+ 	return "sendOtpPage";
+ }
+ @GetMapping("/verifyOtpPage")
+ public String verifyOtpPage() {
+	 
+	 return "verifyOtp";
  }
 }

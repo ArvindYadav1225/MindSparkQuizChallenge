@@ -81,11 +81,14 @@
         <div class="input-group">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
             <input type="email" id="email" class="form-control" placeholder="Enter your Gmail">
+            
         </div>
+        <small style="color:red;display:none" id="validgmail"></small><br>
+        <small style="color:red;display:none" id="validgmail2"></small>
     </div>
 
     <!-- Send OTP Button -->
-    <button class="btn btn-custom w-100 mb-3" onclick="sendOTP()">
+    <button class="btn btn-custom w-100 mb-3" onclick="gmailverify()">
         <i class="bi bi-send"></i> Send OTP
     </button>
 
@@ -94,8 +97,31 @@
 </div>
 
 <script>
-
-
+           
+ async function gmailverify(){
+	 let validgmail=document.getElementById("validgmail");
+	 let validgmail2=document.getElementById("validgmail2");
+	 let gmail=document.getElementById("email").value;
+	 console.log(gmail);
+	 const response = await fetch(`http://localhost:8080/sendOtp/${gmail}`);
+	 const result = await response.json(); 
+	 
+	 if(result==false){
+		   console.log(result);
+		 validgmail.style.display="inline";
+		 validgmail.textContent="Invalid gmail or not Registered";
+		 validgmail2.style.display="inline";
+		 validgmail2.textContent="please enter a valid gmail.";
+	 }
+	 else{
+		 validgmail.style.display="none";
+		 validgmail2.style.display="none";
+	
+		 window.location.href = "/verifyOtpPage";
+			
+		 
+	 }
+ }
 
 </script>
 

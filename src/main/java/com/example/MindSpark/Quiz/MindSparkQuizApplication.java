@@ -30,4 +30,5 @@ public class MindSparkQuizApplication implements CommandLineRunner {
 
     
     }
+    
 }
