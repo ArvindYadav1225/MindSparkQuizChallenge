@@ -120,7 +120,7 @@ body {
         <div class="rank" >1</div>
 
         <div class="player-info">
-            <img src="https://i.pravatar.cc/150?img=12" class="player-img">
+            <img th:src="${user.image}" class="player-img">
             <div>
                 <div class="username" th:text="${user.name}"></div>
                 <div th:text="'Rating '+${user.rating}"><i class="bi bi-star-fill"></i></div>

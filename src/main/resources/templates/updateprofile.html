@@ -81,7 +81,7 @@
     <!-- Profile Icon + Camera -->
     <div class="profile-container">
         <div class="profile-icon" id="profilePreview">
-            <i class="bi bi-person"></i>
+            <img th:src="${user.image}">
         </div>
 
         <label for="fileInput" class="camera-btn">
@@ -117,7 +117,7 @@
 
         <!-- Forgot Password -->
         <div class="text-end mb-3">
-            <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+            <a th:href="@{/sendOtpPage}" class="forgot-link">Forgot Password?</a>
         </div>
 
         <!-- Buttons -->

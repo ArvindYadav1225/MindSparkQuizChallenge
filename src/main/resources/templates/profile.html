@@ -104,15 +104,15 @@
   <!-- Stats -->
   <div class="stats-box d-flex justify-content-around">
     <div>
-      <h6>50</h6>
+      <h6 th:text="${user.score}"></h6>
       <small>Quizzes</small>
     </div>
     <div>
-      <h6>30</h6>
+      <h6 th:text="${#lists.size(user.trueQuiz)}"></h6>
       <small>Wins</small>
     </div>
     <div>
-      <h6>5</h6>
+      <h6 th:text="${user.rating}"></h6>
       <small>Rank</small>
     </div>
   </div>

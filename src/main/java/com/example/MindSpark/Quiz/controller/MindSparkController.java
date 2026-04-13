@@ -14,6 +14,8 @@ import java.util.Random;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -48,6 +52,8 @@ public class MindSparkController {
 	UserRepository ur;
 	@Autowired
 	QuizRepository qr;
+	 @Autowired
+	    private JavaMailSender mailSender;
 //@GetMapping("/home")
 //public String home() {
 //	
@@ -143,8 +149,9 @@ public String profile(HttpSession session,Model m) {
 	return"profile";
 }
 @GetMapping("/updateprofile")
-public String updateprofile() {
-	
+public String updateprofile( HttpSession session,Model model) {
+	User u=ur.getByGmail((String)session.getAttribute("gmail"));
+	 model.addAttribute("user", u);
 	return"updateprofile";
 }
 //List<Map<String,String>> result=new ArrayList<>();
@@ -330,9 +337,9 @@ public String submitLogin(@RequestParam("userName") String userNameOrGmail,Strin
 public String submitProfileUpdate(@RequestParam String name,@RequestParam String userName,@RequestParam String gmail,@RequestParam String password,HttpSession session) {
 	 User u=ur.getByGmail((String)session.getAttribute("gmail"));
 	 if(u.getPassword().equals(password)) {
-		 
+		  return "profile";
 	 }
-	return"";
+	return"updateprofile";
 }
 @GetMapping("/noQuestion/{subject}")
 public String noQuestion(@PathVariable("subject") String subject,HttpSession session) {
@@ -362,9 +369,10 @@ public String referApp() {
 public String previousChallenge(HttpSession session,Model m) {
 	User u=ur.getByGmail((String)session.getAttribute("gmail"));
 	
-	System.out.println(u.getCompletedQuizCurrenTime()+" &&"+u.getCurrentQuiz().size());
+	//System.out.println(u.getCompletedQuizCurrenTime()+" &&"+u.getCurrentQuiz().size());
 	  if(u.getCompletedQuizCurrenTime()==u.getCurrentQuiz().size()) {
 		  m.addAttribute("user", u);
+		  m.addAttribute("noPreviousChallenge","yes");
 		  return "userhomepage";
 	  }
 	  else
@@ -483,27 +491,39 @@ String OTP;
 
 @GetMapping("/generateOtp")
 @ResponseBody
-public void generateOtp() {
+public void generateOtp(String gmail,HttpSession session) throws Exception{
 	Random random2=new Random();
+	if(gmail.equals(null))gmail=(String)session.getAttribute(gmail);
 	OTP=String.valueOf(random2.nextInt(1000000));
+	
+	 MimeMessage helper = mailSender.createMimeMessage();
+     MimeMessageHelper message = new MimeMessageHelper(helper);
+     // m.addAttribute("gmail",gmail);
+      message.setFrom(new InternetAddress("arvyadav936987@gmail.com", "MindSpark Quic Challenge Support"));
+     message.setTo(gmail);
+     message.setSubject("🧠 MindSpark Quiz Challenge  🎯");
+     message.setText("📩 don,t share this OTP to anyone."+"your otp :🔐: "+OTP);
+
+     mailSender.send(helper);
 	System.out.println(OTP);
 	
 }
 
 @GetMapping("/sendOtp/{gmail}")
 @ResponseBody
-public boolean sendOtp(@PathVariable("gmail") String gmail,Model m,HttpSession session) {
+public boolean sendOtp(@PathVariable("gmail") String gmail,Model m,HttpSession session) throws Exception  {
 	List<User> users=ur.findAll();
 	boolean f=false;
 	 for(User u:users) {
 		 if(u.getGmail().equals(gmail)) {
 			 f=true;
+			 session.setAttribute("gmail", gmail);
 			session.setAttribute("userGmail",gmail);
 			 break;
 		 }
 		 }
 	 if(f==true) {
-		 generateOtp();
+		 generateOtp(gmail,session);
 		
 		 
 		 
@@ -516,9 +536,10 @@ public boolean sendOtp(@PathVariable("gmail") String gmail,Model m,HttpSession s
 
 @GetMapping("/otpVerification/{otp}")
 @ResponseBody
-public boolean otpVerification(@PathVariable("otp") String otp) {
+public boolean otpVerification(@PathVariable("otp") String otp,Model m,HttpSession session) {
 	System.out.println(OTP+"    "+otp);
 	if(OTP.equals(otp)) {
+		m.addAttribute("user",ur.getByGmail((String) session.getAttribute("gmail")));
 		return true;
 	}
 	
