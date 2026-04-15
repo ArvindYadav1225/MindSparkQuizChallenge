@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.MindSpark.Quiz.helper.AnalysisResult;
+
 
 import jakarta.persistence.*;
 
@@ -52,9 +52,8 @@ public class User {
 	}
 	List<Integer> trueQuiz=new ArrayList<>();
     List<Integer> completedQuiz=new ArrayList<>();
-    @ElementCollection
-    @CollectionTable(name = "analysis_results", joinColumns = @JoinColumn(name = "quiz_id"))
-    List<AnalysisResult> analysisResult=new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<AnalysisResult> analysisResult=new ArrayList<>();
 	public int getId() {
 		return id;
 	}

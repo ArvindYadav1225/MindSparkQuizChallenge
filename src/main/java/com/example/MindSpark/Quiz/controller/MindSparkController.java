@@ -1,7 +1,9 @@
 package com.example.MindSpark.Quiz.controller;
 import com.example.MindSpark.Quiz.entity.Quiz;
 import com.example.MindSpark.Quiz.entity.User;
-import com.example.MindSpark.Quiz.helper.AnalysisResult;
+import com.example.MindSpark.Quiz.Service.AnalysisResultService;
+import com.example.MindSpark.Quiz.entity.AnalysisResult;
+import com.example.MindSpark.Quiz.repositery.AnalysisResultRepository;
 import com.example.MindSpark.Quiz.repositery.QuizRepository;
 import com.example.MindSpark.Quiz.repositery.UserRepository;
 
@@ -47,13 +49,16 @@ public class MindSparkController {
 	            "vibe", "aura", "spark", "pixel", "neo",
 	            "glitch", "flux", "wave", "nova", "orbit"
 	        );
-
+@Autowired
+AnalysisResultRepository analysisResultRepository;
 	@Autowired
 	UserRepository ur;
 	@Autowired
 	QuizRepository qr;
 	 @Autowired
 	    private JavaMailSender mailSender;
+	 @Autowired
+	 AnalysisResultService analysisResultService;
 //@GetMapping("/home")
 //public String home() {
 //	
@@ -159,12 +164,14 @@ public String updateprofile( HttpSession session,Model model) {
 public String nextQuestion(@PathVariable("quizNo") String quizNo,Model m,HttpSession session) {
 	User u=ur.getByGmail((String)session.getAttribute("gmail"));
 	List<AnalysisResult> analysisResult=u.getAnalysisResult();
+	System.out.println(analysisResult);
 	u.setCompletedQuizCurrenTime(Integer.parseInt(quizNo)+1);
 	 if(Integer.parseInt(quizNo)==9) {
 		 m.addAttribute("analysisResult",analysisResult);
 		 u.setAnalysisResult(new ArrayList<>());
+		 analysisResultService.deleteByUser(u);
 		 u.setCurrentQuiz(new ArrayList<>());
-		 System.out.println(analysisResult);
+		// System.out.println(analysisResult);
 		 u.setCompletedQuizCurrenTime(0);
 		 ur.save(u);
 		  return"analysisPage";
@@ -214,7 +221,8 @@ public void checkresult2(@PathVariable("qId")  String qId,@PathVariable("ao")  S
 			  result.setUserOption(uo);
 			  result.setCorrectOption(ao);
 			  result.setResult(res);
-			 
+			 result.setUser(u);
+			  analysisResultRepository.save(result);
 			  analysisResult.add(result);
 			  u.setAnalysisResult(analysisResult);
 			  
