@@ -64,6 +64,11 @@ AnalysisResultRepository analysisResultRepository;
 //	
 //	return"home";
 //}
+@GetMapping("/")
+	 public String signup1(Model m) {
+	   m.addAttribute("user",new User());
+	 	return"signup";
+	 }
 @GetMapping("/signup")
 public String signup(Model m) {
   m.addAttribute("user",new User());
