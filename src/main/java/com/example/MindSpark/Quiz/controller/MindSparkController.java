@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -65,7 +68,19 @@ AnalysisResultRepository analysisResultRepository;
 //	return"home";
 //}
 @GetMapping("/")
-	 public String signup1(Model m) {
+	 public String signup1(Model m,HttpServletRequest request,HttpSession session ) {
+	Cookie[] cookies=request.getCookies();
+	for(Cookie c:cookies) {
+		if("gmail".equals(c.getName())) {
+			
+			session.setAttribute("gmail",c.getValue());
+			User u=ur.getByGmail((String)session.getAttribute("gmail"));
+		     m.addAttribute("user",u);	
+		     return "redirect:/userhomepage";
+		}
+		
+	}
+	
 	   m.addAttribute("user",new User());
 	 	return"mindsparkquizhome"
 	 			+ "";
@@ -80,7 +95,7 @@ public String submitSignup(@Valid @ModelAttribute("user") User user,
                            BindingResult result,@RequestParam("reCode") String reCode,
                            @RequestParam String cpassword,
                            Model model,
-                           HttpSession session) {
+                           HttpSession session,HttpServletResponse response) {
 
     
 
@@ -132,6 +147,11 @@ public String submitSignup(@Valid @ModelAttribute("user") User user,
     ur.save(user);
     session.setAttribute("gmail", user.getGmail());
     model.addAttribute("user", user);
+   
+	Cookie cookie=new Cookie("gmail",user.getGmail());
+	cookie.setMaxAge(60*60*24*365);
+	cookie.setPath("/");
+	response.addCookie(cookie);
     return "signupSuccessful";
 }
 @GetMapping("userhomepage")
@@ -333,7 +353,7 @@ public String login() {
 	return"login";
 }
 @PostMapping("/submitLogin")
-public String submitLogin(@RequestParam("userName") String userNameOrGmail,String password,Model m,HttpSession session) {
+public String submitLogin(@RequestParam("userName") String userNameOrGmail,String password,Model m,HttpSession session,HttpServletResponse response) {
 	  User user=ur.getByUserName(userNameOrGmail);
 	  if(user==null) {
 		    user=ur.getByGmail(userNameOrGmail);
@@ -345,6 +365,10 @@ public String submitLogin(@RequestParam("userName") String userNameOrGmail,Strin
 	  }
 	session.setAttribute("gmail", user.getGmail());
 	m.addAttribute("user", user);
+	Cookie cookie=new Cookie("gmail",user.getGmail());
+	cookie.setMaxAge(60*60*24*60);
+	cookie.setPath("/");
+	response.addCookie(cookie);
 	return"userhomepage";
 }
 @PostMapping("/submitProfileUpdate")
@@ -405,7 +429,11 @@ public String previousChallenge(HttpSession session,Model m) {
 
 }
 @GetMapping("/findFriend")
-public String findFriend() {
+public String findFriend( Model m,HttpSession session) {
+	User u=ur.getByGmail((String)session.getAttribute("gmail"));
+	List<User>users=new ArrayList<>();
+	users=ur.findAll().stream().limit(10).toList();
+	 m.addAttribute("users",users);
 	return"findFriendPage";
 }
 @PostMapping("/searchFriends")
@@ -456,8 +484,17 @@ public String leaderboard(HttpSession session,Model m) {
 	return "leaderboard";
 }
 @GetMapping("/logout")
-public String logout( HttpSession session) {
+public String logout( HttpSession session,HttpServletRequest req,HttpServletResponse response) {
 	session.removeAttribute("gmail");
+	Cookie[] cookies=req.getCookies();
+	for(Cookie c:cookies) {
+		if("gmail".equals(c.getName())) {
+			c.setMaxAge(0);
+			c.setPath("/");
+			response.addCookie(c);
+			
+		}
+	}
 	return "redirect:/signup";
 }
 @GetMapping("/addFriend/{userName}")
