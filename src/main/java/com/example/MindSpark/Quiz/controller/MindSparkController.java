@@ -346,7 +346,7 @@ public String questionPage( @PathVariable("questionNum") String questionNum,@Pat
 	 m.addAttribute("quizes",quizes);
 	 session.setAttribute("quizes",quizes);
 	 ur.save(u);
-	return"questionPage";
+	return"questionpage";
 }
 @GetMapping("/login")
 public String login() {
