@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindSpark Quiz – Test Your Knowledge Online</title>
+<link rel="icon" href="/static/facivon.png">
+<meta property="og:title" content="MindSpark Quiz – Test Your Knowledge Online">
+<meta property="og:description" content="Play quizzes, challenge friends, and boost your knowledge with MindSpark Quiz.">
+<meta property="og:type" content="website">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+/* Default (Desktop / Laptop) */
+body {
+ display: flex; 
+    margin: 0;
+    padding: 0;
+    background-image: url('/images/mindsparlhomepage2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+     justify-content: center;  /* horizontal center */
+    align-items: center; 
+    
+}
+   button{
+    width:200px;
+    height:40px;
+    margin-top:360px;
+   
+    
+    }
+
+ 
+
+/* Mobile Screen (max-width: 768px) */
+@media (max-width: 768px) {
+    body {
+     display: flex; 
+         background-image: url('/images/mindsparkhomepage1.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+         justify-content: center;  /* horizontal center */
+    align-items: center; 
+    }
+     button{
+    width:200px;
+    height:40px;
+    margin-top:360px;
+    background: rgba(0, 0, 0, 0);
+    border:none;
+    
+    }
+   
+
+
+}
+</style>
+</head>
+<body>
+   <div >  <form th:action="@{/signup}" method="get">
+    <button class="start-btn">
+   
+</button>
+     </form></div>
+</body>
+</html>
