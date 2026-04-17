@@ -125,7 +125,7 @@ function enterOTP(){
 	otpverification.textContent="a";
 }
  async function resendOTP(){
-	 let res=await fetch(`http://localhost:8080/generateOtp`)
+	 let res=await fetch(`/generateOtp`)
 	 
  }
 let timeLeft = 180;
@@ -146,7 +146,7 @@ let countdown = setInterval(() => {
 async function verifyOTP() {
 	
 	let otp=document.getElementById("otp").value;
-    let response=await fetch(`http://localhost:8080/otpVerification/${otp}`);
+    let response=await fetch(`/otpVerification/${otp}`);
 	// const response = await fetch(`http://localhost:8080/sendOtp/${gmail}`);
     let res=await response.json();
     if(res==false){

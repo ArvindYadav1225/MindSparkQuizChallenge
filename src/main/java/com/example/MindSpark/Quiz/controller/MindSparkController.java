@@ -154,7 +154,7 @@ public String submitSignup(@Valid @ModelAttribute("user") User user,
 	response.addCookie(cookie);
     return "signupSuccessful";
 }
-@GetMapping("userhomepage")
+@GetMapping("/userhomepage")
 public String userhomepage(HttpSession session,Model model) {
 	User u=ur.getByGmail((String)session.getAttribute("gmail"));
 	 model.addAttribute("user", u);
@@ -248,6 +248,7 @@ public void checkresult2(@PathVariable("qId")  String qId,@PathVariable("ao")  S
 			  result.setCorrectOption(ao);
 			  result.setResult(res);
 			 result.setUser(u);
+			
 			  analysisResultRepository.save(result);
 			  analysisResult.add(result);
 			  u.setAnalysisResult(analysisResult);

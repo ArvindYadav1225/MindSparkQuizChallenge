@@ -269,9 +269,9 @@ D.<span th:text="${quizes[quizNo].D}"></span>
 <span  style="color:green;display:none" id="true">&nbsp &nbsp &nbsp <i class="bi bi-check-circle-fill"></i>
  Correct Anser.</span>
 <span  style="color:red;display:none" id="false">&nbsp &nbsp &nbsp <i class="bi bi-cross-circle-fill"></i>
- Wrong Anser.</span><br><br>
+ <i class="bi bi-x-circle-fill text-danger"></i> Wrong Anser.</span><br><br>
  <span style="display:none;color:red" id="selectWarning"> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp !Please select any Option.</span>
-<span id="answer" style="color:green;display:none;margin-left:9%"  th:text="'Ans '  + ' ' + ${quizes[quizNo].answer}">></span>
+<span id="answer" style="color:green;display:none;margin-left:5%"  th:text="'Ans '  + '  ' + ${quizes[quizNo].answer}">></span>
 
 
 
@@ -290,6 +290,23 @@ D.<span th:text="${quizes[quizNo].D}"></span>
 
 
 <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Push state to block normal back behavior
+    history.pushState(null, null, location.href);
+
+    window.onpopstate = function () {
+        alert("Quiz is in progress. Your answers are saved. Redirecting to homepage...");
+
+        // Small delay ensures alert is shown properly
+        setTimeout(() => {
+            window.location.href = "/userhomepage";
+        }, 100);
+    };
+
+});
+
 
 /* Timer */
 
@@ -347,19 +364,35 @@ function handleNextClick(event) {
 
 	    link.onclick = null;
 	    
-
+         let trueans;
         
-	   if(document.getElementById("optionA").querySelector("span").textContent===ans)ansOption="A";
-	   if(document.getElementById("optionB").querySelector("span").textContent===ans)ansOption="B";
-	   if(document.getElementById("optionC").querySelector("span").textContent===ans)ansOption="C";
-	   if(document.getElementById("optionD").querySelector("span").textContent===ans)ansOption="D";
+	   if(document.getElementById("optionA").querySelector("span").textContent===ans)
+		   {
+		   ansOption="A";
+		   trueans=document.getElementById("optionA");
+		   }
+	   if(document.getElementById("optionB").querySelector("span").textContent===ans)
+		   {
+		   ansOption="B";
+		   trueans=document.getElementById("optionB");
+		   }
+	   if(document.getElementById("optionC").querySelector("span").textContent===ans)
+		   {
+		   ansOption="C";
+		   trueans=document.getElementById("optionC");
+		   }
+	   if(document.getElementById("optionD").querySelector("span").textContent===ans)
+		   {
+		   ansOption="D";
+		   trueans=document.getElementById("optionD");
+		   }
 	        if(ansOption===option)res=true;
 	        
 	        else res=false;
 	        console.log(ansOption);
 	        console.log(option);
 	        console.log(res);console.log(id);
-	        const response = await fetch(`http://localhost:8080/checkresult2/${id}/${ansOption}/${option}/${res}`);
+	        const response = await fetch(`/checkresult2/${id}/${ansOption}/${option}/${res}`);
 
 	        if (!response.ok) {
 	            throw new Error("Network response was not ok");
@@ -369,13 +402,23 @@ function handleNextClick(event) {
 	        	 document.getElementById('true').style.display="inline";
 	        	 document.getElementById('answer').style.display="inline";
 	        	 document.getElementById('false').style.display="none";
-	        	 
+	        	 let ansval = document.getElementById('answer').textContent;
+
+	        	 ansval = ansval.slice(0,5) + ansOption+ ansval.slice(5);
+
+	        	 document.getElementById('answer').textContent = ansval;
 	        	 flag=false;
 	        } else {
 	            document.getElementById('option'+option).style.backgroundColor = "rgba(255, 0, 0, 0.9)";
 	            document.getElementById('false').style.display="inline";
 	            document.getElementById('true').style.display="none";
 	       	 document.getElementById('answer').style.display="inline";
+	       	trueans.style.backgroundColor="rgba(0, 128, 0, 0.6)";
+	        let ansval = document.getElementById('answer').textContent;
+
+       	 ansval = ansval.slice(0,5) + ansOption+ ansval.slice(5);
+
+       	 document.getElementById('answer').textContent = ansval;
 
 	            flag=false;
 	        }     

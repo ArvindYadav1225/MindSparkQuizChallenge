@@ -104,7 +104,7 @@
 	 let validgmail2=document.getElementById("validgmail2");
 	 let gmail=document.getElementById("email").value;
 	 console.log(gmail);
-	 const response = await fetch(`http://localhost:8080/sendOtp/${gmail}`);
+	 const response = await fetch(`/sendOtp/${gmail}`);
 	 const result = await response.json(); 
 	 
 	 if(result==false){
